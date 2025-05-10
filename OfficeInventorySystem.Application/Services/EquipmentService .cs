@@ -3,6 +3,7 @@ using OfficeInventorySystem.Application.Interfaces;
 using OfficeInventorySystem.Application.Mappers;
 using OfficeInventorySystem.Domain.Entities;
 using OfficeInventorySystem.Domain.Interfaces;
+using System.Linq.Expressions;
 
 
 namespace OfficeInventorySystem.Application.Services
@@ -24,7 +25,7 @@ namespace OfficeInventorySystem.Application.Services
 
         public async Task<IEnumerable<EquipmentDto>> GetAllEquipmentAsync()
         {
-            var equipment = await equipmentRepository.GetAllAsync(i => i.EquipmentType);
+            var equipment = await equipmentRepository.GetAllAsync([i => i.EquipmentType]);
             return equipment.Select(EquipmentEquipmentDtoMapper.Map);
         }
 
@@ -48,6 +49,12 @@ namespace OfficeInventorySystem.Application.Services
             var existingEquipment = await GetEquipmentOrFail(id);
 
             await equipmentRepository.DeleteAsync(id);
+        }
+
+        public async Task<IEnumerable<EquipmentDto>> GetEquipmentsByMaintenanceTasksAsync(int maintenanceTaskId)
+        {
+            var equipmentMaintenances = await equipmentMaintenanceRepository.WhereAsync(x => x.MaintenanceTaskId == maintenanceTaskId, i => i.Equipment);
+            return equipmentMaintenances.Select(x => EquipmentEquipmentDtoMapper.Map(x.Equipment)) ?? [];
         }
 
         public Task AssignMaintenanceTaskToEquipmentAsync(int equipmentId, int maintenanceTaskId)

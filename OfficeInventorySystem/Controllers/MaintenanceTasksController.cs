@@ -52,15 +52,16 @@ namespace OfficeInventorySystem.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            try
+            var task = await maintenanceTaskService.GetMaintenanceTaskByIdAsync(id);
+            if (task == null) return NotFound();
+
+            if (task.EquipmentIds?.Any() ?? false)
             {
-                await maintenanceTaskService.DeleteMaintenanceTaskAsync(id);
-                return NoContent();
+                return Conflict();
             }
-            catch (KeyNotFoundException)
-            {
-                return NotFound();
-            }
+
+            await maintenanceTaskService.DeleteMaintenanceTaskAsync(id);
+            return NoContent();
         }
     }
 }

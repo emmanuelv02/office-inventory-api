@@ -6,6 +6,7 @@ namespace OfficeInventorySystem.Application.DTOs
     {
         public int Id { get; set; }
         public string Description { get; set; }
+        public IEnumerable<int> EquipmentIds { get; set; }
     }
 
     public class MaintenanceTaskDtoValidator : AbstractValidator<MaintenanceTaskDto>
@@ -14,6 +15,9 @@ namespace OfficeInventorySystem.Application.DTOs
         {
             RuleFor(p => p.Description)
                .NotEmpty();
+
+            RuleFor(p => p.EquipmentIds)
+              .NotEmpty();
         }
     }
 }

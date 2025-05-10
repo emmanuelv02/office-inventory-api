@@ -10,13 +10,14 @@ namespace OfficeInventorySystem.Application.Services
     {
         public async Task<MaintenanceTaskDto?> GetMaintenanceTaskByIdAsync(int id)
         {
-            var maintenanceTask = await maintenanceTaskRepository.GetByIdAsync(id);
+            var maintenanceTask = await maintenanceTaskRepository.GetByIdAsync(id, i => i.EquipmentMaintenances);
             return maintenanceTask == null ? null : MaintenanceTaskMaintenanceTaskDtoMapper.Map(maintenanceTask);
         }
 
         public async Task<IEnumerable<MaintenanceTaskDto>> GetAllMaintenanceTaskAsync()
         {
-            var maintenanceTask = await maintenanceTaskRepository.GetAllAsync();
+            var maintenanceTask = await maintenanceTaskRepository.GetAllAsync([i => i.EquipmentMaintenances]);
+
             return maintenanceTask.Select(MaintenanceTaskMaintenanceTaskDtoMapper.Map);
         }
 

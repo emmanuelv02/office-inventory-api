@@ -27,8 +27,20 @@ namespace OfficeInventorySystem.Persistence.Repositories
             return result;
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, object>>? include = null) => 
-            include != null ? await _dbSet.Include(include).ToListAsync() : await _dbSet.ToListAsync();
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, object>>[]? includes = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return await query.ToListAsync();
+        }
+
 
         public async Task<TEntity?> GetByIdAsync(int id, Expression<Func<TEntity, object>>? include = null)
         {

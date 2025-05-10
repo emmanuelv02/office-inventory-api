@@ -12,5 +12,6 @@ namespace OfficeInventorySystem.Application.Interfaces
         Task DeleteEquipmentAsync(int id);
         Task DeleteEquipmentMaintenanceAsync(int equipmentId, int maintenanceId);
         Task AssignMaintenanceTaskToEquipmentAsync(int equipmentId, int maintenanceTaskId);
+        Task<IEnumerable<EquipmentDto>> GetEquipmentsByMaintenanceTasksAsync(int maintenanceTaskId);
     }
 }

@@ -75,6 +75,13 @@ namespace OfficeInventorySystem.Controllers
             return Ok(tasks);
         }
 
+        [HttpGet("maintenances/{id}")]
+        public async Task<ActionResult> GetEquipmentsByMaintenanceTasks(int id)
+        {
+            var equipments = await equipmentService.GetEquipmentsByMaintenanceTasksAsync(id);
+            return Ok(equipments);
+        }
+
         [HttpDelete("{equipmentId}/maintenances/{maintenanceTaskId}")]
         public async Task<IActionResult> DeleteMaintenance(int equipmentId, int maintenanceTaskId)
         {
